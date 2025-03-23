@@ -40,5 +40,10 @@ namespace GestionBiblioteca.Services
         }
 
 
+        public Usuario BuscarUsuarioPorId(int id)
+        {
+            return usuariosRegistrados.FirstOrDefault(u => u.Id == id);
+        }
     }
+
 }

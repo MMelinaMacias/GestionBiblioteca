@@ -38,5 +38,16 @@ namespace GestionBiblioteca.Utils
             }
             return phoneNumber;
         }
+        public static int ValidateInt(string str)
+        {
+            int resultado;
+            while (!int.TryParse(str, out resultado) || resultado <= 0)
+            {
+                Console.WriteLine("El valor ingresado no es un número entero válido. Inténtelo de nuevo.");
+                str = Console.ReadLine();
+            }
+            return resultado;
+        }
+
     }
 }

@@ -4,6 +4,7 @@ using static GestionBiblioteca.Utils.Validations;
 class Program
 {
     private static LibroService libroService = new();
+    private static UserService userService = new();
     public static void Main(string[] args)
     {
         Console.WriteLine("----Sistema de Gestión de Biblioteca Digital----");
@@ -39,6 +40,7 @@ class Program
                 RegistrarUsuario();
                 break;
             case 4:
+                ActualizarUsuario();
                 break;
             case 5:
                 break;
@@ -75,6 +77,8 @@ class Program
             Console.WriteLine("Ingrese el ISBN del libro: ");
             string isbn = ValidateString(Console.ReadLine());
 
+            Libro libro = new Libro(titulo, autor, fechaPublicacion, isbn);
+            libroService.AgregarLibro(libro);
         }
 
 
@@ -100,8 +104,10 @@ class Program
             Console.WriteLine("Ingrese el nuevo año de publicación del libro: ");
             DateTime nuevaFechaPublicacion = ValidateDate(Console.ReadLine());
 
-            Console.WriteLine("Ingrese el nuevo ISBN del libro: ");
-            string nuevoIsbn = ValidateString(Console.ReadLine());
+            libroExistente.Titulo = nuevoTitulo;
+            libroExistente.Autor = nuevoAutor;
+            libroExistente.AnioPublicacion = nuevaFechaPublicacion;
+            libroService.ActualizarLibro(isbn, libroExistente);
             }   
         private static void RegistrarUsuario()
         {
@@ -115,8 +121,37 @@ class Program
             Console.WriteLine("Ingrese el teléfono del usuario: ");
             string telefono = ValidatePhoneNumber(Console.ReadLine());
 
-
+            Usuario us = new Usuario(nombre, email, telefono);
+            userService.AgregarUsuario(us);
         }
+
+    private static void ActualizarUsuario()
+    {
+        Console.WriteLine("Ingrese el ID del usuario que desea actualizar: ");
+        int idUsuario = ValidateInt(Console.ReadLine()); 
+
+        Usuario usuarioExistente = userService.BuscarUsuarioPorId(idUsuario);
+
+        if (usuarioExistente == null)
+        {
+            Console.WriteLine("Error: No se encontró un usuario con ese ID.");
+            return;
+        }
+
+
+        Console.WriteLine("Ingrese el nuevo nombre del usuario: ");
+        string nuevoNombre = ValidateString(Console.ReadLine());
+        Console.WriteLine("Ingrese el nuevo email del usuario: ");
+        string nuevoEmail = ValidateString(Console.ReadLine());
+        Console.WriteLine("Ingrese el nuevo telefono del usuario: ");
+        string nuevoTelefono = ValidatePhoneNumber(Console.ReadLine());
+
+        usuarioExistente.Nombre = nuevoNombre;
+        usuarioExistente.CorreoElectronico = nuevoEmail;
+        usuarioExistente.Telefono = nuevoTelefono;
+
+        userService.ActualizarUsuario(idUsuario, usuarioExistente);
+    }
 
     private static void ShowMenu()
         {
